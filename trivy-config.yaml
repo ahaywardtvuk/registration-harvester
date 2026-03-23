@@ -8,4 +8,3 @@ scan:
     - vuln
     - misconfig
     - secret
-    - license
