@@ -1,0 +1,11 @@
+format: 'sarif'
+output: 'trivy-results.sarif'
+severity: 'CRITICAL,HIGH,MEDIUM,UNKNOWN'
+exit-code: 0
+ignorefile: .trivyignore.yaml
+scan:
+  scanners:
+    - vuln
+    - misconfig
+    - secret
+    - license
