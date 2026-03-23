@@ -2,6 +2,7 @@ name: Build and publish Docker image
 on:
   push:
     #branches: [ main, 'release/[0-9].[0-9]' ]
+    branches: trivy-scanning
     tags:
       - "[0-9]+.[0-9]+.[0-9]+*"
   pull_request:
