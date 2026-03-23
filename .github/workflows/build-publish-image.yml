@@ -56,8 +56,22 @@ jobs:
           echo "tags=${{ steps.meta.outputs.tags }}"
           echo "labels=${{ steps.meta.outputs.labels }}"
       - name: Build and push
+        id: build
         uses: docker/build-push-action@v6
         with:          
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           #tags: eoepca/registration-harvester:latest,eoepca/registration-harvester:${{ env.HARVESTER_VERSION }}      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: 'docker.io/eoepca/registration-harvester:${{ steps.build.outputs.imageid }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
+          severity: 'UNKNOWN,MEDIUM,HIGH,CRITICAL'
+          scanners: 'vuln,misconfig,secret,license'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: 'trivy-results.sarif'
