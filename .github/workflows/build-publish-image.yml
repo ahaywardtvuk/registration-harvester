@@ -63,10 +63,15 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           #tags: eoepca/registration-harvester:latest,eoepca/registration-harvester:${{ env.HARVESTER_VERSION }}      
+      - name: Get Docker tag to scan
+        id: extract_tag
+        run: |
+          tag=$(echo ${{ steps.meta.outputs.tags }} | head -n1)
+          echo $tag
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: docker.io/${{ vars.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester:${{ steps.build.outputs.imageid }}
+          image-ref: ${{ steps.extract-tag.outputs.tag }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '1'
