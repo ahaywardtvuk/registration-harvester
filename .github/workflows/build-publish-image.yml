@@ -64,7 +64,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           #tags: eoepca/registration-harvester:latest,eoepca/registration-harvester:${{ env.HARVESTER_VERSION }}      
       - name: Get Docker tag to scan
-        id: extract_tag
+        id: extract-tag
         run: |
           tag=$(echo ${{ steps.meta.outputs.tags }} | head -n1)
           echo $tag
