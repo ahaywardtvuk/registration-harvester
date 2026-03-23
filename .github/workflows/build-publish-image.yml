@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -51,7 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: eoepca/registration-harvester
+          images: ${{ env.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester
       - name: Print metadata for the Docker image
         run: |
           echo "tags=${{ steps.meta.outputs.tags }}"
@@ -66,7 +66,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: 'docker.io/eoepca/registration-harvester:${{ steps.build.outputs.imageid }}'
+          image-ref: 'docker.io/${{ env.DOCKERHUB_ORG || "eoepca" }}/registration-harvester:${{ steps.build.outputs.imageid }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '1'
