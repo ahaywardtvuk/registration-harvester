@@ -51,7 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester
+          images: ${{ vars.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester
       - name: Print metadata for the Docker image
         run: |
           echo "tags=${{ steps.meta.outputs.tags }}"
@@ -66,7 +66,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: docker.io/${{ env.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester:${{ steps.build.outputs.imageid }}
+          image-ref: docker.io/${{ vars.DOCKERHUB_ORG || 'eoepca' }}/registration-harvester:${{ steps.build.outputs.imageid }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '1'
